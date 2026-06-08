@@ -44,6 +44,7 @@ nSalario decimal(10,2) not null constraint CHK_Salario check( nSalario > 300)
 
 );
 
+--Crear tabla TProyecto
 create table TProyecto(
 nProyectoID int identity(1,1) constraint PK_nProyectoID primary key,
 cNombreProyecto nvarchar(50) not null,
@@ -54,10 +55,89 @@ dFechaFinal date null,
 
 );
 
+-- Crear tabla TEmpleadoProyecto
 create table TEmpleadoProyecto(
 nEmpleadoProyectoID int identity(1,1) constraint PK_TEmpleadoProyecto primary key,
 nEmpleadoID int constraint FK_Empleado_EmpleadoProyecto foreign key (nEmpleadoID) references TEmpleado(nEmpleadoID), 
 nProyectoID int constraint FK_Proyecto_EmpleadoProyecto foreign key (nProyectoID) references TProyecto(nProyectoID)
+
+);
+
+/* ALTERS */ 
+
+-- Agregar cEmail a TEmpleado
+alter table TEmpleado
+add cEmail nvarchar(60); 
+go 
+
+-- Agregar columna cTelefono
+alter table TEmpleado 
+add cTelefono nvarchar(15); 
+go
+
+--Modificar longitud de cNombre a 100caracteres 
+alter table TEmpleado
+alter column cNombre nvarchar(100) not null;
+go 
+
+--Modificar longitud de cApellido a 100 caracteres 
+alter table TEmpleado 
+alter column cApellido nvarchar(100) not null; 
+go 
+
+--Agregar columna cDireccion 
+alter table TEmpleado 
+add cDireccion nvarchar(MAX); 
+go
+
+--Agregar la columna nEdad 
+alter table TEmpleado 
+add nEdad int;
+go 
+
+--Crear restriccion check para edades entre 18 y 65 años
+alter table TEmpleado 
+add constraint CHK_Edad check(edad > 18 and edad < 65);
+go 
+
+--agregar restriccion unique al correo electronico 
+alter table TEmpleado 
+add constraint U_Email unique(cEmail)
+
+--Agregar columna bActivo defecto 1
+alter table TEmpleado 
+add bActivo bit constraint DF_bActivo default 1;
+go 
+
+--Eliminar la columna cDireccion 
+alter table TEmpleado 
+drop column cDireccion;
+go 
+
+--Cambiar el tipo de datos de telefono a Varchar(20) 
+alter table TEmpleado 
+alter column cTelefono varchar(20);
+go 
+
+--Agregar columna cGenero 
+alter table TEmpleado 
+add cGenero varchar(1);
+go 
+
+--Agregar restriccion genero = M o F 
+alter table TEmpleado
+add constraint CHK_cGenero check(cGenero IN ('F', 'M'));
+go 
+
+--Agregar columna dFechaNacimiento 
+alter table TEmpleado 
+add dFechaNacimiento date; 
+go 
+
+--Crear nueva tabla llamada TSucursal
+create table TSucursal(
+nSucursalID int identity(1,1) constraint PK_nSucursalID primary key,
+cNombreSucursal nvarchar(30) not null
 
 );
 
